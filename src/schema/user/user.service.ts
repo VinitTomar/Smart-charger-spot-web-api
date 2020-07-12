@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
 import { User } from './user.schema';
 
@@ -17,7 +17,9 @@ export class UserService {
   }
 
   async fintById(id: string) {
-    return this._userMode.findOne({ _id: id });
+    const ids = Types.ObjectId(id);
+    const usr = await this._userMode.findById(ids);
+    return usr;
   }
 
 }

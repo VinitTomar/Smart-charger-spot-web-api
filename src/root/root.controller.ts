@@ -1,8 +1,15 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { UserService, User } from 'src/schema';
+import { JwtPayload } from 'src/types';
 
 @Controller('')
 export class RootController {
+
+  constructor(
+    private readonly _usrServic: UserService
+  ) { }
+
   @Get()
   getHello(): string {
     return 'Hello World!...';
@@ -10,7 +17,9 @@ export class RootController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('profile')
-  profileDetail(@Req() req: any) {
-    return req.user;
+  async profileDetail(@Req() req: any) {
+    const payload: JwtPayload = req.user;
+    const user: User = await this._usrServic.fintById(payload.sub);
+    return user.toJSON();
   }
 }
