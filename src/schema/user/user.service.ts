@@ -9,16 +9,20 @@ import { User } from './user.schema';
 export class UserService {
 
   constructor(
-    @InjectModel(User.name) private readonly _userMode: Model<User>
+    @InjectModel(User.name) private readonly _userModel: Model<User>
   ) { }
 
+  async create(detail: User) {
+    return this._userModel.create(detail);
+  }
+
   async findByUsername(username: string) {
-    return this._userMode.findOne({ username });
+    return this._userModel.findOne({ username });
   }
 
   async fintById(id: string) {
     const ids = Types.ObjectId(id);
-    const usr = await this._userMode.findById(ids);
+    const usr = await this._userModel.findById(ids);
     return usr;
   }
 
