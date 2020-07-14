@@ -17,10 +17,11 @@ export class User extends Document {
     required: true,
     trim: true,
     unique: true,
+    maxlength: 255,
     validate: {
-      validator: /^[\w ]+$/,
-      message: 'Invalid username. Only alphanumeric, with space & underscore, allowed.',
-      type: 'Invalid'
+      validator: /^[\w]+$/,
+      message: 'Invalid username. Only alphanumeric, with underscore, allowed.',
+      type: 'Pattern'
     }
   })
   username: string;
@@ -29,10 +30,11 @@ export class User extends Document {
     required: true,
     trim: true,
     unique: true,
+    maxlength: 255,
     validate: {
       validator: /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/,
       message: 'Invalid email.',
-      type: 'Invalid'
+      type: 'Pattern'
     }
   })
   email: string;
@@ -40,13 +42,14 @@ export class User extends Document {
   @Prop({
     required: true,
     trim: true,
+    maxlength: 255,
     validate: {
       validator: /^[a-zA-Z ]+$/,
       message: 'Invalid fullName. Only alphabets, with space, allowed.',
-      type: 'Invalid'
+      type: 'Pattern'
     }
   })
-  fullName: string;
+  fullname: string;
 
   @Prop({
     required: true,
@@ -56,9 +59,7 @@ export class User extends Document {
   })
   password: string;
 
-  @Prop({
-    required: true
-  })
+  @Prop()
   isAdmin: boolean;
 
 }

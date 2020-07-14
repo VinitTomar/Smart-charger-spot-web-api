@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { LoginController } from './login.controller';
-import { AuthenticationModule } from 'src/shared';
+import { AuthenticationModule } from '../authentication';
 
 
 

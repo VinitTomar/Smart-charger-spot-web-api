@@ -1,8 +1,8 @@
 import { Controller, Post, UseGuards, Req } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
-import { TokenService } from 'src/shared';
-import { JwtPayload } from 'src/types';
+import { JwtPayload } from '../types';
+import { TokenService } from '../authentication';
 
 
 @Controller('login')

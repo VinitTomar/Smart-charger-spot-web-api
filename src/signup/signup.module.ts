@@ -1,9 +1,14 @@
 import { Module } from '@nestjs/common';
+
 import { SignupController } from './signup.controller';
-import { UserModule } from 'src/schema';
+import { UserModule } from '../schema';
+import { AuthenticationModule } from '../authentication';
 
 @Module({
-  imports: [UserModule],
+  imports: [
+    UserModule,
+    AuthenticationModule
+  ],
   controllers: [SignupController]
 })
 export class SignupModule { }
