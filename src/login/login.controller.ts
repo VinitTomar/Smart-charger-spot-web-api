@@ -1,5 +1,6 @@
 import { Controller, Post, UseGuards, Req } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 
 import { JwtPayload } from '../types';
 import { TokenService } from '../authentication';
@@ -14,9 +15,9 @@ export class LoginController {
 
   @UseGuards(AuthGuard('local'))
   @Post()
-  async authenticate(@Req() req: any) {
+  async authenticate(@Req() req: Request) {
     const payload: JwtPayload = {
-      sub: req.user._id
+      sub: req.user['_id']
     };
     return { token: this._tknSer.getJwtToken(payload) };
   }

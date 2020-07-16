@@ -20,10 +20,14 @@ export class UserService {
     return this._userModel.findOne({ username });
   }
 
-  async fintById(id: string) {
+  async findById(id: string) {
     const ids = Types.ObjectId(id);
     const usr = await this._userModel.findById(ids);
     return usr;
+  }
+
+  async findByEmail(email: string) {
+    return this._userModel.findOne({ email });
   }
 
 }

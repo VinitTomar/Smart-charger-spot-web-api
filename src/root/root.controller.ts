@@ -2,6 +2,7 @@ import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserService, User } from 'src/schema';
 import { JwtPayload } from 'src/types';
+import { Request } from 'express';
 
 @Controller('')
 export class RootController {
@@ -17,9 +18,11 @@ export class RootController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('profile')
-  async profileDetail(@Req() req: any) {
-    const payload: JwtPayload = req.user;
-    const user: User = await this._usrServic.fintById(payload.sub);
+  async profileDetail(@Req() req: Request) {
+    const payload: JwtPayload = {
+      sub: req.user['_id']
+    };
+    const user: User = await this._usrServic.findById(payload.sub);
     return user.toJSON();
   }
 }
