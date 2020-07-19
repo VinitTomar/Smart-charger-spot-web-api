@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, HookNextFunction, HookSyncCallback } from 'mongoose';
 import mongooseUniqueValidator = require("mongoose-unique-validator");
 import { hash } from 'bcrypt';
 
@@ -9,7 +9,7 @@ import { hash } from 'bcrypt';
     transform: (doc: any, ret: any) => {
       delete ret.password;
     }
-  },
+  }
 })
 export class User extends Document {
 
@@ -64,13 +64,15 @@ export class User extends Document {
 
 }
 
-const UserSchema = SchemaFactory.createForClass(User);
-UserSchema.pre<User>('save', async function () {
+const passHashFunc: HookSyncCallback<User> = async function (next: HookNextFunction) {
   const saltRounds: number = +process.env.BCRYPT_SALT_CYCLES;
   const passHash = await hash(this.password, saltRounds);
   this.password = passHash;
-  return;
-});
+  next();
+}
+
+const UserSchema = SchemaFactory.createForClass(User);
+UserSchema.pre<User>('save', passHashFunc);
 UserSchema.plugin(mongooseUniqueValidator, { type: 'unique' });
 
 export { UserSchema };

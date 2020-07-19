@@ -9,7 +9,6 @@ export class TokenService {
   ) { }
 
   getJwtToken(payload: JwtPayload): string {
-    // console.log({ jwtKey: process.env.JWT_SECRET_KEY })
     return this.jwtService.sign(payload);
   }
 }

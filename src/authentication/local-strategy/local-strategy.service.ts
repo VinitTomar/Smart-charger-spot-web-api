@@ -17,12 +17,12 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   async validate(username: string, password: string) {
     const usr: User = await this._usrService.findByUsername(username);
     if (!usr) {
-      throw new UnauthorizedException('Account does not exist.');
+      throw new UnauthorizedException({ field: 'username', message: 'Account does not exist.' });
     }
 
     const passwordMatched: boolean = await compare(password, usr.password);
     if (!passwordMatched) {
-      throw new UnauthorizedException('Invalid password.');
+      throw new UnauthorizedException({ field: 'password', message: 'Invalid password.' });
     }
 
     return usr.toJSON();

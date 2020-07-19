@@ -4,6 +4,7 @@ import { Request } from 'express';
 
 import { JwtPayload } from '../types';
 import { TokenService } from '../authentication';
+import { User } from 'src/schema';
 
 
 @Controller('login')
@@ -16,8 +17,9 @@ export class LoginController {
   @UseGuards(AuthGuard('local'))
   @Post()
   async authenticate(@Req() req: Request) {
+    const user = (req.user as User);
     const payload: JwtPayload = {
-      sub: req.user['_id']
+      sub: user._id
     };
     return { token: this._tknSer.getJwtToken(payload) };
   }

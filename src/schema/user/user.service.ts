@@ -21,13 +21,20 @@ export class UserService {
   }
 
   async findById(id: string) {
-    const ids = Types.ObjectId(id);
-    const usr = await this._userModel.findById(ids);
+    const _id = Types.ObjectId(id);
+    const usr = await this._userModel.findById(_id);
     return usr;
   }
 
   async findByEmail(email: string) {
     return this._userModel.findOne({ email });
+  }
+
+  async update(detail: User) {
+    const usr = await this.findById(detail.id);
+    usr.set('password', detail.password);
+    usr.set('fullname', detail.fullname);
+    return usr.save();
   }
 
 }
