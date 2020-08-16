@@ -1,10 +1,12 @@
-import { Controller, Get, Post, UseGuards, Req, Body, UsePipes } from '@nestjs/common';
+import { Controller, Get, Post, UseGuards, Req, Body, UsePipes, Query, Put, Param } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
+import { Request } from 'express';
+import { Types as mTypes } from 'mongoose';
+
+import { Pci } from './pci.schema';
 import { PciChargerOptionService, User } from 'src/schema';
 import { PciService } from './pci.service';
-import { Request } from 'express';
-import { Pci } from './pci.schema';
 import { ValidatePciChargersPipe } from './validate-pci-chargers.pipe';
 
 @Controller('pci')
@@ -22,8 +24,16 @@ export class PciController {
   }
 
   @Get()
-  async list() {
+  async list(@Req() req: Request, @Query('user') userType: string) {
+    if (userType === 'current') {
+      return this._pciService.findByOwner((req.user as User)._id);
+    }
     return this._pciService.all();
+  }
+
+  @Get(":id")
+  async pciByIc(@Param("id") id: mTypes.ObjectId) {
+    return this._pciService.findById(id);
   }
 
   @Post()
@@ -31,6 +41,12 @@ export class PciController {
   async create(@Req() req: Request, @Body() pci: Pci) {
     pci.owner = (req.user as User)._id;
     return this._pciService.create(pci);
+  }
+
+  @Put()
+  async update(@Req() req: Request, @Body() pci: Pci) {
+    pci.owner = (req.user as User)._id;
+    return this._pciService.update(pci);
   }
 
 }

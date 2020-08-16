@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Pci } from './pci.schema';
-import { Model } from 'mongoose';
+import { Model, Types as mTypes } from 'mongoose';
 
 @Injectable()
 export class PciService {
@@ -15,12 +15,26 @@ export class PciService {
     return this._pciModel.find();
   }
 
-  async findByOwner() {
-    return this._pciModel.find({});
+  async findById(id: mTypes.ObjectId) {
+    return this._pciModel.findById(id);
+  }
+
+  async findByOwner(ownerId: mTypes.ObjectId) {
+    return this._pciModel.find({ owner: ownerId });
   }
 
   async create(pci: Pci) {
     return this._pciModel.create(pci);
+  }
+
+  async update(pciDetail: Pci) {
+    const pci = await this.findById(pciDetail._id);
+    pci.set('name', pciDetail.name);
+    pci.set('highWay', pciDetail.highWay);
+    pci.set('gpsCoord', pciDetail.gpsCoord);
+    pci.set('address', pciDetail.address);
+    pci.set('chargers', pciDetail.chargers);
+    return pci.save();
   }
 
 }
