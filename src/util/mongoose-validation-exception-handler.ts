@@ -15,7 +15,7 @@ export class MongooseValidationExceptionHandler implements ExceptionFilter {
     for (const key in exception.errors) {
       const errField = exception.errors[key]
       const err = {
-        field: errField.path,
+        field: key,
         type: errField.kind,
         message: errField.message
       };

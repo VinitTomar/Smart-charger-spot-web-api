@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, HookNextFunction, HookSyncCallback } from 'mongoose';
+import { Document, HookNextFunction, HookSyncCallback, Types as mTypes } from 'mongoose';
+
 import mongooseUniqueValidator = require("mongoose-unique-validator");
 import { hash } from 'bcrypt';
 
@@ -12,6 +13,14 @@ import { hash } from 'bcrypt';
   }
 })
 export class User extends Document {
+
+  get id() {
+    return this._id;
+  }
+
+  set id(id: mTypes.ObjectId) {
+    this._id = id;
+  }
 
   @Prop({
     required: true,

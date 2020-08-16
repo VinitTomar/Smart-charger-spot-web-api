@@ -31,7 +31,7 @@ export class UserService {
   }
 
   async update(detail: User) {
-    const usr = await this.findById(detail.id);
+    const usr = await this.findById(detail.id.toString());
     usr.set('password', detail.password);
     usr.set('fullname', detail.fullname);
     return usr.save();
