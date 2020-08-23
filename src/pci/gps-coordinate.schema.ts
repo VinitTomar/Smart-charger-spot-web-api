@@ -20,7 +20,7 @@ export class GpsCoordinate extends Document {
     min: -180,
     max: 180
   })
-  longitue: number;
+  longitude: number;
 }
 
 const GpsCoordinateSchema = SchemaFactory.createForClass(GpsCoordinate);

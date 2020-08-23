@@ -1,4 +1,4 @@
-import { Controller, Get, Post, UseGuards, Req, Body, UsePipes, Query, Put, Param } from '@nestjs/common';
+import { Controller, Get, Post, UseGuards, Req, Body, UsePipes, Query, Put, Param, Delete, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { Request } from 'express';
@@ -8,6 +8,7 @@ import { Pci } from './pci.schema';
 import { PciChargerOptionService, User } from 'src/schema';
 import { PciService } from './pci.service';
 import { ValidatePciChargersPipe } from './validate-pci-chargers.pipe';
+import { TranformDeleteResponse } from './tranform-delete-response.interceptor';
 
 @Controller('pci')
 @UseGuards(AuthGuard('jwt'))
@@ -47,6 +48,12 @@ export class PciController {
   async update(@Req() req: Request, @Body() pci: Pci) {
     pci.owner = (req.user as User)._id;
     return this._pciService.update(pci);
+  }
+
+  @Delete(":id")
+  @UseInterceptors(TranformDeleteResponse)
+  async delete(@Req() req: Request, @Param("id") pciId: string) {
+    return this._pciService.delete((req.user as User)._id, pciId);
   }
 
 }

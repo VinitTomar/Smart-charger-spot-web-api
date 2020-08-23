@@ -26,7 +26,6 @@ export class Pci extends Document {
   name: string;
 
   @Prop({
-    required: true,
     maxlength: 250
   })
   highWay: string;

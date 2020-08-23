@@ -9,6 +9,7 @@ import { MongooseValidationExceptionHandler } from './util';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api');
   app.use(cors());
   app.useGlobalFilters(new MongooseValidationExceptionHandler());
   await app.listen(3000);

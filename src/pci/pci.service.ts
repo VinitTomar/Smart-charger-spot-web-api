@@ -37,4 +37,11 @@ export class PciService {
     return pci.save();
   }
 
+  async delete(ownerId: string, pciId: string) {
+    return this._pciModel.deleteOne({
+      owner: mTypes.ObjectId(ownerId),
+      _id: mTypes.ObjectId(pciId)
+    });
+  }
+
 }
