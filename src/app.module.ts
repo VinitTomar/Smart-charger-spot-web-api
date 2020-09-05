@@ -10,6 +10,7 @@ import { AvailableModule } from './available/available.module';
 import { ProfileModule } from './profile/profile.module';
 import { PciModule } from './pci/pci.module';
 import { PciChargerOptionModule } from './schema';
+import { BookingModule } from './booking/booking.module';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { PciChargerOptionModule } from './schema';
     AvailableModule,
     ProfileModule,
     PciModule,
-    PciChargerOptionModule
+    PciChargerOptionModule,
+    BookingModule
   ],
   controllers: [RootController],
   providers: [],

@@ -45,6 +45,7 @@ export class PciController {
   }
 
   @Put()
+  @UsePipes(ValidatePciChargersPipe)
   async update(@Req() req: Request, @Body() pci: Pci) {
     pci.owner = (req.user as User)._id;
     return this._pciService.update(pci);
