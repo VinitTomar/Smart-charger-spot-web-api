@@ -22,6 +22,13 @@ export class PciService {
     return this._pciModel.find({ owner: ownerId });
   }
 
+  async searchByKeyword(keyword: string) {
+    const byName = await this._pciModel.find({ name: new RegExp(keyword) });
+    const byHighWay = await this._pciModel.find({ highWay: new RegExp(keyword) });
+
+    return [...byName, ...byHighWay];
+  }
+
   async create(pci: Pci) {
     return await this._pciModel.create(pci);
   }

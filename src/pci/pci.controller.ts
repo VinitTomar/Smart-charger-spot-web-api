@@ -25,10 +25,15 @@ export class PciController {
   }
 
   @Get()
-  async list(@Req() req: Request, @Query('user') userType: string) {
+  async list(@Req() req: Request, @Query('user') userType: string, @Query('search') keyword: string) {
     if (userType === 'current') {
       return this._pciService.findByOwner((req.user as User)._id);
     }
+
+    if (keyword) {
+      return this._pciService.searchByKeyword(keyword);
+    }
+
     return this._pciService.all();
   }
 
