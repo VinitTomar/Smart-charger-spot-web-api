@@ -10,7 +10,6 @@ export class PciService {
     @InjectModel(Pci.name) private readonly _pciModel: Model<Pci>
   ) { }
 
-
   async all() {
     return this._pciModel.find();
   }
@@ -24,7 +23,7 @@ export class PciService {
   }
 
   async create(pci: Pci) {
-    return this._pciModel.create(pci);
+    return await this._pciModel.create(pci);
   }
 
   async update(pciDetail: Pci) {

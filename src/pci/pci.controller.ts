@@ -1,14 +1,13 @@
 import { Controller, Get, Post, UseGuards, Req, Body, UsePipes, Query, Put, Param, Delete, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-
 import { Request } from 'express';
 import { Types as mTypes } from 'mongoose';
-
 import { Pci } from './pci.schema';
 import { PciChargerOptionService, User } from 'src/schema';
 import { PciService } from './pci.service';
 import { ValidatePciChargersPipe } from './validate-pci-chargers.pipe';
 import { TranformDeleteResponse } from './tranform-delete-response.interceptor';
+import { BookingService } from 'src/booking/booking.service';
 
 @Controller('pci')
 @UseGuards(AuthGuard('jwt'))
@@ -16,7 +15,8 @@ export class PciController {
 
   constructor(
     private readonly _pciService: PciService,
-    private readonly _pciChargerOption: PciChargerOptionService
+    private readonly _pciChargerOption: PciChargerOptionService,
+    private readonly _bookingService: BookingService
   ) { }
 
   @Get('charger-option')
@@ -33,8 +33,13 @@ export class PciController {
   }
 
   @Get(":id")
-  async pciByIc(@Param("id") id: mTypes.ObjectId) {
+  async pciById(@Param("id") id: mTypes.ObjectId) {
     return this._pciService.findById(id);
+  }
+
+  @Get(":id/booking")
+  async pciBooking(@Param("id") id: mTypes.ObjectId) {
+    return this._bookingService.findByPciId(id);
   }
 
   @Post()
