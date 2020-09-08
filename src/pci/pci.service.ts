@@ -23,8 +23,8 @@ export class PciService {
   }
 
   async searchByKeyword(keyword: string) {
-    const byName = await this._pciModel.find({ name: new RegExp(keyword) });
-    const byHighWay = await this._pciModel.find({ highWay: new RegExp(keyword) });
+    const byName = await this._pciModel.find({ name: new RegExp(keyword, 'i') });
+    const byHighWay = await this._pciModel.find({ highWay: new RegExp(keyword, 'i') });
 
     return [...byName, ...byHighWay];
   }
