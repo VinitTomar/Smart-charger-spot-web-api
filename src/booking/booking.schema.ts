@@ -48,6 +48,12 @@ export class Booking extends Document {
   })
   end: Date;
 
+  @Prop({
+    required: true,
+    min: 15
+  })
+  duration: number;
+
 }
 
 const BookingSchema = SchemaFactory.createForClass(Booking);
