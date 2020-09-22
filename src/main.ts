@@ -12,8 +12,9 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.use(cors());
   app.useGlobalFilters(new MongooseValidationExceptionHandler());
-  await app.listen(3000);
-  console.log('App is running at port: 3000');
+  const port = process.env.PORT || 3000;
+  await app.listen(port);
+  console.log(`App is running at port: ${port}`);
 }
 bootstrap();
 
