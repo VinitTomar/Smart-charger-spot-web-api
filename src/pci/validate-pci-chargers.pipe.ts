@@ -1,6 +1,7 @@
 import { ArgumentMetadata, Injectable, PipeTransform, BadRequestException } from '@nestjs/common';
 import { PciChargerOptionService } from 'src/schema';
 import { Pci } from './pci.schema';
+import { PciChargerValidatorErr } from './pci-charger-validator-err';
 
 @Injectable()
 export class ValidatePciChargersPipe implements PipeTransform {
@@ -15,7 +16,12 @@ export class ValidatePciChargersPipe implements PipeTransform {
 
     const chargers = value.chargers;
 
-    const errFields = chargers.map((chrg, i) => {
+    const errFields: PciChargerValidatorErr[] = chargers.map((chrg, i) => {
+      const err: PciChargerValidatorErr = {
+        msg: '',
+        path: ''
+      };
+
       const found = !!chargerOptions.find(optn => {
         const isMatched = (
           optn.type === chrg.type
@@ -26,21 +32,27 @@ export class ValidatePciChargersPipe implements PipeTransform {
         return isMatched;
       });
 
+      err.path = `chargers.${i}`;
+
       if (found) {
-        return '';
+        if (chargers.map(chrg => chrg.connector).lastIndexOf(chrg.connector) !== i) {
+          err.msg = ` has duplicate entry.`;
+        }
       } else {
-        return `chargers.${i}`;
+        err.msg = ` has invalid configuration.`;
       }
+
+      return err;
     });
 
-    const filteredErrFileld = errFields.filter(msg => !!msg);
+    const filteredErrFileld = errFields.filter(err => !!err.msg);
 
     if (filteredErrFileld && filteredErrFileld.length > 0) {
-      const invalidFields = filteredErrFileld.map(msg => {
+      const invalidFields = filteredErrFileld.map(err => {
         return {
-          "field": msg,
+          "field": err.path,
           "type": 'Invalid charger',
-          "message": `Path \`${msg}\` is has invalid configuration.`
+          "message": `Path \`${err.path}\` ${err.msg}`
         }
       });
 

@@ -6,6 +6,7 @@ import { AuthenticationModule } from 'src/authentication';
 import { PciChargerOptionModule } from 'src/schema';
 import { Pci, PciSchema } from './pci.schema';
 import { PciService } from './pci.service';
+import { BookingModule } from 'src/booking/booking.module';
 
 
 @Module({
@@ -13,6 +14,7 @@ import { PciService } from './pci.service';
   imports: [
     AuthenticationModule,
     PciChargerOptionModule,
+    BookingModule,
     MongooseModule.forFeature([
       { name: Pci.name, schema: PciSchema }
     ])

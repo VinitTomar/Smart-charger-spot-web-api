@@ -10,7 +10,6 @@ export class PciService {
     @InjectModel(Pci.name) private readonly _pciModel: Model<Pci>
   ) { }
 
-
   async all() {
     return this._pciModel.find();
   }
@@ -23,8 +22,15 @@ export class PciService {
     return this._pciModel.find({ owner: ownerId });
   }
 
+  async searchByKeyword(keyword: string) {
+    const byName = await this._pciModel.find({ name: new RegExp(keyword, 'i') });
+    const byHighWay = await this._pciModel.find({ highWay: new RegExp(keyword, 'i') });
+
+    return [...byName, ...byHighWay];
+  }
+
   async create(pci: Pci) {
-    return this._pciModel.create(pci);
+    return await this._pciModel.create(pci);
   }
 
   async update(pciDetail: Pci) {

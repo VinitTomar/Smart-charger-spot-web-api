@@ -13,6 +13,7 @@ async function bootstrap() {
   app.use(cors());
   app.useGlobalFilters(new MongooseValidationExceptionHandler());
   await app.listen(3000);
+  console.log('App is running at port: 3000');
 }
 bootstrap();
 
